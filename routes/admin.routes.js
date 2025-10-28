@@ -58,7 +58,7 @@ const router = express.Router();
  */
 
 
-router.get("/users", authenticate, authorizeRoles("admin"), getAllUsers);
+router.get("/users", authenticate, authorizeRoles("admin", "teacher"), getAllUsers);
 
 router.get("/logs", authenticate, authorizeRoles("admin"), getLogs);
 
