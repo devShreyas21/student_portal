@@ -9,11 +9,17 @@ import adminRoutes from "./routes/admin.routes.js";
 import teacherRoutes from "./routes/teacher.routes.js";
 import studentRoutes from "./routes/student.routes.js";
 
+// Swagger
+import { swaggerSpec, swaggerUi } from "./swagger.js";
+
 dotenv.config();
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// ✅ Swagger Docs route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Routes
 app.use("/api/auth", authRoutes);
