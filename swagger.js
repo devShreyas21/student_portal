@@ -16,7 +16,7 @@ const options = {
         description: "Local server",
       },
       {
-        url: "https://your-backend.vercel.app",
+        url: "https://student-portal-ten-chi.vercel.app/",
         description: "Production server (Vercel)",
       },
     ],
