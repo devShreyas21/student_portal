@@ -34,21 +34,29 @@ export const getAssignedProjects = async (req, res) => {
   }
 };
 
-// ✅ Submit a task
+// ✅ Submit a task (with optional file)
 export const submitTask = async (req, res) => {
   try {
-    const { task_id, content } = req.body;
+    const { task_id, content, file } = req.body; // file is optional (path from upload API)
     const student_id = req.user.id;
 
     const task = await Task.findById(task_id);
     if (!task) return res.status(404).json({ message: "Task not found" });
 
+    // check if student has already submitted
     const existing = task.submissions.find((s) => s.student_id === student_id);
 
     if (existing) {
-      existing.content = content; // update old submission
+      // Update old submission
+      existing.content = content || existing.content;
+      existing.file = file || existing.file;
     } else {
-      task.submissions.push({ student_id, content });
+      // Add new submission
+      task.submissions.push({
+        student_id,
+        content,
+        file: file || null,
+      });
     }
 
     await task.save();
@@ -56,7 +64,7 @@ export const submitTask = async (req, res) => {
 
     res.json({ message: "Submission successful", task });
   } catch (err) {
-    console.error(err);
+    console.error("Error submitting task:", err);
     res.status(500).json({ message: "Failed to submit task" });
   }
 };
