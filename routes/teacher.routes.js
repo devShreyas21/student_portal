@@ -144,6 +144,149 @@ const router = express.Router();
  *         description: Access denied
  */
 
+/**
+ * @swagger
+ * /api/teacher/project/{id}:
+ *   put:
+ *     summary: Edit an existing project (Teacher only)
+ *     tags: [Teacher]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the project to edit
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: Updated Project Title
+ *               description:
+ *                 type: string
+ *                 example: Updated Project Description
+ *     responses:
+ *       200:
+ *         description: Project updated successfully
+ *       400:
+ *         description: Invalid request
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Access denied
+ *       404:
+ *         description: Project not found
+ *       500:
+ *         description: Failed to update project
+ */
+
+/**
+ * @swagger
+ * /api/teacher/project/{id}:
+ *   delete:
+ *     summary: Soft delete a project (mark as deleted)
+ *     tags: [Teacher]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the project to delete
+ *     responses:
+ *       200:
+ *         description: Project deleted (soft)
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Access denied
+ *       404:
+ *         description: Project not found
+ *       500:
+ *         description: Failed to delete project
+ */
+
+/**
+ * @swagger
+ * /api/teacher/task/{id}:
+ *   put:
+ *     summary: Edit an existing task (Teacher only)
+ *     tags: [Teacher]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the task to edit
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: Updated Task Title
+ *               description:
+ *                 type: string
+ *                 example: Updated Task Description
+ *     responses:
+ *       200:
+ *         description: Task updated successfully
+ *       400:
+ *         description: Invalid request
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Access denied
+ *       404:
+ *         description: Task not found
+ *       500:
+ *         description: Failed to update task
+ */
+
+/**
+ * @swagger
+ * /api/teacher/task/{id}:
+ *   delete:
+ *     summary: Soft delete a task (mark as deleted)
+ *     tags: [Teacher]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the task to delete
+ *     responses:
+ *       200:
+ *         description: Task deleted (soft)
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Access denied
+ *       404:
+ *         description: Task not found
+ *       500:
+ *         description: Failed to delete task
+ */
+
+
 
 router.post("/project", authenticate, authorizeRoles("teacher"), createProject);
 router.get("/projects", authenticate, authorizeRoles("teacher"), getTeacherProjects);
