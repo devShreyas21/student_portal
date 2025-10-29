@@ -58,6 +58,84 @@ const router = express.Router();
  */
 
 
+/**
+ * @swagger
+ * /api/admin/users:
+ *   post:
+ *     summary: Create a new user (Admin only)
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *               - role_name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: John Doe
+ *               email:
+ *                 type: string
+ *                 example: john@example.com
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *               role_name:
+ *                 type: string
+ *                 enum: [admin, teacher, student]
+ *                 example: teacher
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *       400:
+ *         description: Missing fields or email already exists
+ *       401:
+ *         description: Unauthorized (no token provided)
+ *       403:
+ *         description: Access denied (only admin can access)
+ *       500:
+ *         description: Failed to create user
+ */
+
+/**
+ * @swagger
+ * /api/admin/users/{id}:
+ *   delete:
+ *     summary: Delete a user by ID (Admin only)
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The user ID to delete
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       400:
+ *         description: Cannot delete your own account
+ *       401:
+ *         description: Unauthorized (no token provided)
+ *       403:
+ *         description: Access denied (only admin can access)
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Failed to delete user
+ */
+
+
+
 router.get("/users", authenticate, authorizeRoles("admin", "teacher"), getAllUsers);
 
 // ✅ Admin can add new user
