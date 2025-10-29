@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const submissionSchema = new mongoose.Schema({
   student_id: Number,
   content: String,
-  file: {
-    type: String, // 📎 uploaded file path (if any)
+  fileId: {
+    type: String, // 🗂️ GridFS file ID
     default: null,
   },
   grade: {

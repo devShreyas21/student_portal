@@ -2,7 +2,7 @@ import { Project } from "../models/project.model.js";
 import { Task } from "../models/task.model.js";
 import { logActivity } from "../utils/logger.js";
 
-// ✅ View assigned projects (with filtering + pagination)
+// ✅ Get all assigned projects
 export const getAssignedProjects = async (req, res) => {
   try {
     const student_id = req.user.id;
@@ -29,33 +29,30 @@ export const getAssignedProjects = async (req, res) => {
       projects,
     });
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching projects:", err);
     res.status(500).json({ message: "Failed to fetch assigned projects" });
   }
 };
 
-// ✅ Submit a task (with optional file)
+// ✅ Submit a task (with optional fileId from GridFS)
 export const submitTask = async (req, res) => {
   try {
-    const { task_id, content, file } = req.body; // file is optional (path from upload API)
+    const { task_id, content, fileId } = req.body; // 🆕 fileId replaces file path
     const student_id = req.user.id;
 
     const task = await Task.findById(task_id);
     if (!task) return res.status(404).json({ message: "Task not found" });
 
-    // check if student has already submitted
     const existing = task.submissions.find((s) => s.student_id === student_id);
 
     if (existing) {
-      // Update old submission
       existing.content = content || existing.content;
-      existing.file = file || existing.file;
+      existing.fileId = fileId || existing.fileId;
     } else {
-      // Add new submission
       task.submissions.push({
         student_id,
         content,
-        file: file || null,
+        fileId: fileId || null,
       });
     }
 
