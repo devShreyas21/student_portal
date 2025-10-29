@@ -1,3 +1,4 @@
+// controllers/teacher.controller.js
 import { Project } from "../models/project.model.js";
 import { Task } from "../models/task.model.js";
 import { logActivity } from "../utils/logger.js";
@@ -24,7 +25,7 @@ export const createProject = async (req, res) => {
   }
 };
 
-// ✅ Get all projects created by the teacher (with filtering + pagination)
+// ✅ Get all projects created by the teacher
 export const getTeacherProjects = async (req, res) => {
   try {
     const teacher_id = req.user.id;
@@ -32,10 +33,9 @@ export const getTeacherProjects = async (req, res) => {
 
     const skip = (page - 1) * limit;
 
-    // Search filter
     const query = {
       teacher_id,
-      title: { $regex: search, $options: "i" }, // case-insensitive title search
+      title: { $regex: search, $options: "i" },
     };
 
     const total = await Project.countDocuments(query);
@@ -95,5 +95,81 @@ export const gradeSubmission = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error grading submission" });
+  }
+};
+
+// ✅ Edit a project
+export const editProject = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description } = req.body;
+
+    const project = await Project.findByIdAndUpdate(
+      id,
+      { title, description, isEdited: true },
+      { new: true }
+    );
+
+    if (!project) return res.status(404).json({ message: "Project not found" });
+    res.json({ message: "Project updated successfully", project });
+  } catch (err) {
+    console.error("Error updating project:", err);
+    res.status(500).json({ message: "Failed to update project" });
+  }
+};
+
+// ✅ Soft delete project
+export const deleteProject = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const project = await Project.findByIdAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true }
+    );
+
+    if (!project) return res.status(404).json({ message: "Project not found" });
+    res.json({ message: "Project deleted (soft)", project });
+  } catch (err) {
+    console.error("Error deleting project:", err);
+    res.status(500).json({ message: "Failed to delete project" });
+  }
+};
+
+// ✅ Edit a task
+export const editTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description } = req.body;
+
+    const task = await Task.findByIdAndUpdate(
+      id,
+      { title, description, isEdited: true },
+      { new: true }
+    );
+
+    if (!task) return res.status(404).json({ message: "Task not found" });
+    res.json({ message: "Task updated successfully", task });
+  } catch (err) {
+    console.error("Error updating task:", err);
+    res.status(500).json({ message: "Failed to update task" });
+  }
+};
+
+// ✅ Soft delete task
+export const deleteTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const task = await Task.findByIdAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true }
+    );
+
+    if (!task) return res.status(404).json({ message: "Task not found" });
+    res.json({ message: "Task deleted (soft)", task });
+  } catch (err) {
+    console.error("Error deleting task:", err);
+    res.status(500).json({ message: "Failed to delete task" });
   }
 };

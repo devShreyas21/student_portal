@@ -1,3 +1,4 @@
+// models/task.model.js
 import mongoose from "mongoose";
 
 const submissionSchema = new mongoose.Schema({
@@ -19,6 +20,8 @@ const taskSchema = new mongoose.Schema({
   description: String,
   status: { type: String, default: "pending" },
   submissions: [submissionSchema],
+  isEdited: { type: Boolean, default: false },
+  isDeleted: { type: Boolean, default: false },
 });
 
 export const Task = mongoose.model("Task", taskSchema);
